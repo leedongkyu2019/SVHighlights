@@ -160,6 +160,8 @@ huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir 
 | `annotations/label.json` | `benchmark/labeling.py` | Per-clip `{0, 1}` highlight labels (one score per 2-second clip) — the evaluation ground truth. |
 | `annotations/whisper/` | `tf_selector/transcribe.py` | Word-level WhisperX transcripts. |
 | `annotations/segments/` | `tf_selector/segment.py` | Context-aware segments (2-minute maximum length). |
+| `annotations/volume.json` | `tf_selector/volume.py` | Per-clip audio loudness (dBFS) for every video. |
+| `annotations/minmax_volume.json` | `tf_selector/volume_minmax.py` | Min-max normalized per-clip audio volume in `[0, 1]`. |
 
 **Features** (QVHighlights-style)
 
@@ -291,8 +293,8 @@ data/
     ├── whisper/              # tf_selector/transcribe.py
     ├── whisper_all/          # tf_selector/transcribe.py
     ├── segments/             # tf_selector/segment.py
-    ├── volume/               # tf_selector/volume.py
-    └── volume_norm.json      # tf_selector/volume_minmax.py
+    ├── volume.json           # tf_selector/volume.py
+    └── minmax_volume.json    # tf_selector/volume_minmax.py
 ```
 
 Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
