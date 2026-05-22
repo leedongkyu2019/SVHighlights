@@ -259,7 +259,7 @@ python eval.py \
     --save_path      path/to/results.json
 ```
 
-`eval.py` reports five metrics, computed per sport and over `all`:
+`eval.py` reports four metrics, computed per sport and over `all`:
 
 | Metric | Description |
 |---|---|
@@ -267,7 +267,6 @@ python eval.py \
 | `HL-Hit1` | Whether the top-scored clip is a ground-truth highlight |
 | `HL-Hitk` | Hit rate among the top-K clips (K = number of GT highlight clips) |
 | `HL-IoU` | Temporal overlap between the top-K predictions and GT highlights |
-| `HL-wF1` | Event-level F1 with a ±3-clip window tolerance |
 
 ## 📁 Data Layout
 

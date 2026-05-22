@@ -2,13 +2,12 @@
 SVHighlights highlight-detection evaluation.
 
 Given a model's per-clip saliency predictions and the dataset's ground-truth
-highlight labels, reports five metrics per sport and over `all`:
+highlight labels, reports four metrics per sport and over `all`:
 
     HL-mAP   clip-level mean Average Precision
     HL-Hit1  whether the top-scored clip is a ground-truth highlight
     HL-Hitk  hit rate among the top-K clips (K = #GT highlight clips)
     HL-IoU   temporal overlap between the top-K predictions and GT highlights
-    HL-wF1   event-level F1 with a +/-3-clip window tolerance
 
 Usage:
     python eval.py --submission_path preds.json --gt_path gt.json --save_path out.json
@@ -179,74 +178,6 @@ def compute_hl_iou(vid2preds, vid2gt_scores):
     return round(total_iou * 100, 2)
 
 
-def _extract_segments(binary_labels):
-    segments = []
-    start = None
-    for i, val in enumerate(binary_labels):
-        if val == 1 and start is None:
-            start = i
-        elif val == 0 and start is not None:
-            segments.append((start, i - 1))
-            start = None
-    if start is not None:
-        segments.append((start, len(binary_labels) - 1))
-    return segments
-
-
-def compute_hl_window_f1(vid2preds, vid2gt_scores, window=3):
-    total_tp_p = 0
-    total_fp = 0
-    total_tp_r = 0
-    total_fn = 0
-
-    for vid in vid2preds:
-        scores = list(vid2preds[vid])
-        gt_scores = list(vid2gt_scores[vid])
-
-        min_len = min(len(scores), len(gt_scores))
-        scores = scores[:min_len]
-        gt_scores = gt_scores[:min_len]
-
-        gt_segments = _extract_segments(gt_scores)
-        k = sum(gt_scores)
-
-        if k == 0:
-            continue
-
-        sorted_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
-        topk_set = set(sorted_indices[:int(k)])
-        pred_binary = [1 if i in topk_set else 0 for i in range(len(scores))]
-        pred_segments = _extract_segments(pred_binary)
-
-        # Recall: each GT segment detected if any pred point within window
-        for gs, ge in gt_segments:
-            ws = max(0, gs - window)
-            we = min(len(scores) - 1, ge + window)
-            if any(pred_binary[i] == 1 for i in range(ws, we + 1)):
-                total_tp_r += 1
-            else:
-                total_fn += 1
-
-        # Precision: each pred segment correct if overlaps any GT segment window
-        for ps, pe in pred_segments:
-            hit = False
-            for gs, ge in gt_segments:
-                ws = max(0, gs - window)
-                we = min(len(scores) - 1, ge + window)
-                if ps <= we and pe >= ws:
-                    hit = True
-                    break
-            if hit:
-                total_tp_p += 1
-            else:
-                total_fp += 1
-
-    precision = total_tp_p / (total_tp_p + total_fp) if (total_tp_p + total_fp) > 0 else 0
-    recall = total_tp_r / (total_tp_r + total_fn) if (total_tp_r + total_fn) > 0 else 0
-    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-    return round(f1 * 100, 2)
-
-
 def eval_highlight(submission, ground_truth, verbose=True):
     highlight_det_metrics = {}
     video_domain = ["american_football", "baseball", "basketball", "ice_hockey",
@@ -261,10 +192,9 @@ def eval_highlight(submission, ground_truth, verbose=True):
         mean_ap = compute_hl_ap(vid2preds, vid2gt_scores)
         hit_at_k = compute_hl_hitk(vid2preds, vid2gt_scores)
         iou = compute_hl_iou(vid2preds, vid2gt_scores)
-        window_f1 = compute_hl_window_f1(vid2preds, vid2gt_scores)
         highlight_det_metrics[domain] = {
             "HL-mAP": mean_ap, "HL-Hit1": hit_at_one, "HL-Hitk": hit_at_k,
-            "HL-IoU": iou, "HL-wF1": window_f1,
+            "HL-IoU": iou,
         }
     return highlight_det_metrics
 
