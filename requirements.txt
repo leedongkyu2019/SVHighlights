@@ -1,0 +1,23 @@
+# SVHighlights preprocessing dependencies — covers both benchmark/ and tf_selector/.
+# Install into a single conda environment; see README.md ("Environment setup").
+#
+# Also required, installed separately (see README.md):
+#   * ffmpeg / ffprobe  -- conda install -c conda-forge ffmpeg
+#   * CLIP              -- pip install git+https://github.com/openai/CLIP.git
+#                          (only for benchmark/eval_clip_similarity.py)
+#   * WhisperX          -- pip install git+https://github.com/m-bain/whisperX.git
+#                          (only for tf_selector/transcribe.py)
+#   * TransNet V2       -- git clone https://github.com/soCzech/TransNetV2
+#                          (only for tf_selector/shot_boundary.py)
+#
+# Tested with Python 3.9; the versions below are the ones the pipeline was run with.
+
+numpy==2.0.2
+torch==2.4.1
+Pillow==10.4.0
+scikit-image==0.24.0
+tqdm==4.67.1
+natsort==8.4.0
+pandas==2.3.3
+pydub
+scikit-learn          # highlight-detection evaluation (eval.py)

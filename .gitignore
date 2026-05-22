@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Tooling
+.omc/
+
+# Data / outputs (do not commit videos, frames, or annotations)
+data/
+*.mp4
+*.wav
+*.mp3

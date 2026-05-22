@@ -1,0 +1,155 @@
+/* ===================== SVHighlights project page ===================== */
+:root {
+  --accent: #1f6feb;
+  --accent-dark: #1a4fb4;
+  --ink: #1f2328;
+  --muted: #5b6470;
+  --alt-bg: #f5f7fa;
+  --border: #e3e6ea;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--ink);
+  background: #ffffff;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-dark); }
+
+/* ---------- hero ---------- */
+.hero.head {
+  background: linear-gradient(180deg, #eef3fb 0%, #ffffff 100%);
+  border-bottom: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.paper-title {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  font-size: 2.65rem;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  margin-bottom: 1.4rem;
+  color: #16223a;
+}
+
+.venue { margin-bottom: 1.4rem; }
+.venue-tag {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.venue-sub {
+  margin-left: 0.6rem;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.authors { font-size: 1.22rem; margin-bottom: 0.4rem; }
+.authors .author { margin: 0 0.55rem; white-space: nowrap; }
+.authors .author a { color: var(--ink); border-bottom: 1px solid rgba(31,111,235,0.4); }
+.authors .author a:hover { color: var(--accent); }
+.authors sup { color: var(--accent); font-weight: 700; }
+
+.affiliation { font-size: 1.05rem; color: var(--muted); margin-bottom: 0.2rem; }
+.contrib { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; }
+.contrib sup { color: var(--accent); }
+
+/* ---------- link buttons ---------- */
+.link-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+.link-buttons .button {
+  background: #1f2328;
+  border: none;
+  font-weight: 500;
+  padding-left: 1.3rem;
+  padding-right: 1.3rem;
+}
+.link-buttons .button:hover { background: #000; }
+.link-buttons .button[disabled] { background: #b8bdc4; opacity: 1; cursor: not-allowed; }
+.link-buttons .button em { font-style: normal; opacity: 0.75; font-weight: 400; margin-left: 0.25rem; }
+
+/* ---------- sections ---------- */
+.section-title {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  color: #16223a;
+  margin-bottom: 1.6rem;
+}
+.section-alt { background: var(--alt-bg); }
+
+.abstract { font-size: 1.05rem; line-height: 1.75; color: #2c333d; }
+.abstract ol { margin-top: 0.6rem; }
+.abstract li { margin-bottom: 0.5rem; }
+
+img { border-radius: 6px; }
+
+.caption {
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin-top: 0.7rem;
+  font-style: italic;
+}
+
+.teaser-section img { max-width: 680px; width: 100%; box-shadow: 0 4px 18px rgba(20,40,80,0.10); }
+
+/* ---------- stats ---------- */
+.stats-section { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.stat-num {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-num .stat-unit { font-size: 1.4rem; margin-left: 1px; }
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.4rem;
+}
+
+/* ---------- video grid ---------- */
+.video-grid { margin-top: 0.5rem; }
+.video-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(20,40,80,0.07);
+  height: 100%;
+}
+.video-label {
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: #16223a;
+  color: #fff;
+  margin: 0;
+}
+.video-card video { display: block; width: 100%; background: #000; }
+
+/* ---------- footer ---------- */
+.footer { background: #16223a; color: #cbd3df; }
+.footer a { color: #9ec1ff; }
+.footer-note { font-size: 0.85rem; color: #8c97a8; margin-top: 0.6rem; }
+
+/* ---------- responsive ---------- */
+@media screen and (max-width: 768px) {
+  .paper-title { font-size: 1.85rem; }
+  .section-title { font-size: 1.55rem; }
+  .authors { font-size: 1.05rem; }
+  .authors .author { display: inline-block; margin: 0.15rem 0.45rem; }
+  .stat-num { font-size: 2rem; }
+}

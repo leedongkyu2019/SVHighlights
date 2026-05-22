@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SVHighlights: Towards Extremely Long Sport Video Highlight Detection</title>
+  <meta name="description" content="SVHighlights — the first benchmark for highlight detection in extremely long sports videos. KDD 2026 Datasets & Benchmarks Track.">
+
+  <meta property="og:title" content="SVHighlights: Towards Extremely Long Sport Video Highlight Detection">
+  <meta property="og:description" content="The first benchmark for highlight detection in extremely long sports videos — 320 videos, 8 sports, 640 hours.">
+  <meta property="og:image" content="static/images/teaser.png">
+  <meta property="og:type" content="website">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero head">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+      <h1 class="paper-title">SVHighlights: Towards Extremely Long<br>Sport Video Highlight Detection</h1>
+
+      <div class="venue">
+        <span class="tag is-medium venue-tag">KDD 2026</span>
+        <span class="venue-sub">Datasets &amp; Benchmarks Track</span>
+      </div>
+
+      <div class="authors">
+        <span class="author"><a href="https://github.com/leedongkyu2019">Donggyu Lee</a><sup>*</sup></span>
+        <span class="author">Youngbin Ki<sup>*</sup></span>
+        <span class="author">Jeonghun Kang</span>
+        <span class="author">Taehwan Kim</span>
+      </div>
+
+      <div class="affiliation">
+        Ulsan National Institute of Science and Technology (UNIST)
+      </div>
+      <div class="contrib"><sup>*</sup>&nbsp;Equal contribution</div>
+
+      <!-- ===== link buttons ===== -->
+      <div class="link-buttons">
+        <!-- TODO: replace with the paper link once available -->
+        <span class="link-block">
+          <button class="button is-rounded is-dark is-medium" disabled title="Coming soon">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper <em>(coming soon)</em></span>
+          </button>
+        </span>
+        <span class="link-block">
+          <a class="button is-rounded is-dark is-medium" href="https://github.com/leedongkyu2019/SVHighlights" target="_blank" rel="noopener">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <span>Code</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a class="button is-rounded is-dark is-medium" href="https://huggingface.co/datasets/idong1004/SVHighlights" target="_blank" rel="noopener">
+            <span class="icon">🤗</span>
+            <span>Dataset</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEASER ===================== -->
+<section class="section teaser-section">
+  <div class="container is-max-desktop has-text-centered">
+    <img src="static/images/teaser.png" alt="SVHighlights teaser">
+    <p class="caption">
+      SVHighlights videos average <strong>2 hours</strong> — roughly 30–60&times; longer
+      than existing highlight detection benchmarks.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section class="section stats-section">
+  <div class="container is-max-desktop">
+    <div class="columns is-mobile is-multiline has-text-centered">
+      <div class="column"><div class="stat-num">320</div><div class="stat-label">Videos</div></div>
+      <div class="column"><div class="stat-num">8</div><div class="stat-label">Sports</div></div>
+      <div class="column"><div class="stat-num">640<span class="stat-unit">h</span></div><div class="stat-label">Total Duration</div></div>
+      <div class="column"><div class="stat-num">2.0<span class="stat-unit">h</span></div><div class="stat-label">Avg. Video Length</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABSTRACT ===================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="section-title has-text-centered">Abstract</h2>
+    <div class="content has-text-justified abstract">
+      <p>
+        While highlight detection for long-form videos is of great practical importance,
+        most existing methods remain limited to short-form content, largely due to the
+        absence of a suitable benchmark. To bridge this gap, we introduce
+        <strong>SVHighlights</strong>, to the best of our knowledge, the first benchmark for
+        highlight detection in extremely long sports videos, each exceeding one hour in
+        duration, across multiple sports categories. SVHighlights is constructed from pairs
+        of full-length sports videos and their corresponding official highlight videos using
+        a <strong>highlight alignment pipeline</strong>, enabling scalable and cost-effective
+        label generation without conventional per-clip saliency annotation. The benchmark
+        comprises 320 videos spanning a wide range of sports, with an average duration of
+        2.00 hours and a total of 640.18 hours, substantially exceeding previous highlight
+        detection datasets. Beyond the lack of benchmarks, existing methods also face
+        fundamental challenges on long videos: models trained on short clips of only a few
+        minutes fail to generalize to hour-long content, and their clip-level scoring lacks
+        the broader context needed to identify highlights in long-form videos. To address
+        these challenges and provide a strong baseline for SVHighlights, we present
+        <strong>TF-SELECTOR</strong>, a training-free segment-based approach that divides each
+        video into context-aware segments by merging adjacent shots sharing the same semantic
+        content, and predicts segment-level saliency scores using a large language model (LLM)
+        with multimodal inputs including visual captions, transcripts, and audio volume.
+        Extensive experiments demonstrate that TF-SELECTOR achieves superior performance
+        across most evaluation metrics compared to Video Temporal Grounding (VTG)-tuned
+        baselines, with improvements of <strong>+3.12 in HIT@1</strong>,
+        <strong>+4.06 in HIT@K</strong>, and <strong>+2.95 in IoU</strong>. These results
+        establish SVHighlights as a challenging testbed for long-form highlight detection and
+        demonstrate that a simple segment-based strategy can effectively scale to hour-long
+        videos.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DATASET ===================== -->
+<section class="section section-alt">
+  <div class="container is-max-desktop">
+    <h2 class="section-title has-text-centered">The SVHighlights Dataset</h2>
+    <div class="content has-text-justified abstract">
+      <p>
+        SVHighlights pairs <strong>320 full-length sports broadcasts</strong> with their
+        official highlight videos, spanning <strong>8 sports</strong> — american football,
+        baseball, basketball, ice hockey, racing, rugby, soccer, and volleyball
+        (40 videos each). The figures below show the duration distribution of the full
+        broadcasts and of their official highlight videos across categories.
+      </p>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <img src="static/images/full_distribution.png" alt="Full video length distribution">
+        <p class="caption">Full video length distribution.</p>
+      </div>
+      <div class="column has-text-centered">
+        <img src="static/images/highlight_distribution.png" alt="Highlight video length distribution">
+        <p class="caption">Highlight video length distribution.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HIGHLIGHT ALIGNMENT ===================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="section-title has-text-centered">Highlight Alignment</h2>
+    <div class="content has-text-justified abstract">
+      <p>
+        Rather than relying on manual per-clip annotation, we align each official highlight
+        video to its full-length broadcast. Every 1-second highlight clip is matched to the
+        most similar full-video frame via a pixel-level <strong>PSNR</strong> score, a
+        post-processing step enforces temporal consistency, and a filtering step removes
+        mismatched frames — yielding highlight labels at scale without costly human scoring.
+      </p>
+    </div>
+    <div class="has-text-centered">
+      <img src="static/images/alignment_pipeline.png" alt="Highlight alignment pipeline" style="max-width:760px;width:100%;">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUALITATIVE COMPARISON ===================== -->
+<section class="section section-alt">
+  <div class="container is-max-desktop">
+    <h2 class="section-title has-text-centered">Qualitative Comparison</h2>
+    <div class="content has-text-justified abstract">
+      <p>
+        Each video places the <strong>official highlight video</strong> (left) next to the
+        <strong>full-video frames aligned by our pipeline</strong> (right) — for every
+        highlight second, a 1-second clip cut from the full broadcast at the frame our
+        highlight alignment matched. One example is shown per sport.
+      </p>
+    </div>
+    <div class="columns is-multiline video-grid">
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏈&nbsp; American Football</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/00203f1c-07cc-4aae-86ca-b27d0112410f" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">⚾&nbsp; Baseball</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/79a085b2-d753-4605-a615-c23a1277b4cd" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏀&nbsp; Basketball</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/20e98ad3-b1b7-4831-b9b4-ab29082ed48e" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏒&nbsp; Ice Hockey</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/112c64e8-f92a-4211-9e83-65a9a3bb7ec8" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏁&nbsp; Racing</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/def80680-9ff7-4811-8802-57e52a7b6d86" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏉&nbsp; Rugby</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/d43b7302-f21b-4502-b0f6-fc8c14fd93fa" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">⚽&nbsp; Soccer</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/963d97c5-db41-4a6f-b86e-f8d1e1336416" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card">
+          <p class="video-label">🏐&nbsp; Volleyball</p>
+          <video controls muted loop playsinline preload="metadata">
+            <source src="https://github.com/user-attachments/assets/dd024b45-91b0-4d98-a552-fab94d3716f6" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TF-SELECTOR ===================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="section-title has-text-centered">TF-SELECTOR</h2>
+    <div class="content has-text-justified abstract">
+      <p>
+        <strong>TF-SELECTOR</strong> (<strong>T</strong>raining-<strong>F</strong>ree
+        <strong>S</strong>egment-based <strong>E</strong>xtremely <strong>L</strong>ong video
+        highlight det<strong>ECTOR</strong>) is a training-free baseline with three stages:
+      </p>
+      <ol>
+        <li><strong>Context-aware segmentation</strong> — shots are detected with a
+          shot-boundary detector and adjacent shots that share the same spoken sentence
+          (from an ASR model) are merged into coherent segments.</li>
+        <li><strong>Segment captioning</strong> — a vision–language model (VLM) generates a
+          textual description for each segment.</li>
+        <li><strong>Segment-level scoring</strong> — a large language model (LLM) predicts a
+          saliency score per segment from the caption, transcript, and audio volume; the
+          score is then assigned to every clip in the segment.</li>
+      </ol>
+    </div>
+    <div class="has-text-centered">
+      <img src="static/images/method.png" alt="TF-SELECTOR framework">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container has-text-centered">
+    <p>
+      <a href="https://github.com/leedongkyu2019/SVHighlights" target="_blank" rel="noopener">Code &amp; Documentation</a>
+      &nbsp;·&nbsp;
+      <a href="https://huggingface.co/datasets/idong1004/SVHighlights" target="_blank" rel="noopener">Dataset on Hugging Face</a>
+    </p>
+    <p class="footer-note">
+      Website template adapted from the
+      <a href="https://nerfies.github.io/" target="_blank" rel="noopener">Nerfies</a> project page.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
