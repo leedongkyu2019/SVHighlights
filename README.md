@@ -157,6 +157,7 @@ huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir 
 |---|---|---|
 | `annotations/alignment/` | `benchmark/align.py` | Per-video raw PSNR alignment between highlight clips and full-video frames. |
 | `annotations/filtered_frame_idx.json` | `benchmark/filter_frames.py` + manual filtering | Final aligned frame index per highlight clip. |
+| `annotations/label.json` | `benchmark/labeling.py` | Per-clip `{0, 1}` highlight labels (one score per 2-second clip) — the evaluation ground truth. |
 | `annotations/whisper/` | `tf_selector/transcribe.py` | Word-level WhisperX transcripts. |
 | `annotations/segments/` | `tf_selector/segment.py` | Context-aware segments (2-minute maximum length). |
 
@@ -246,15 +247,16 @@ file** with a per-clip saliency score for every video, then run `eval.py`.
 - `pred_saliency_scores` — one predicted score per **2-second clip**, in clip
   order (each video is divided into non-overlapping 2-second clips)
 
-**Ground-truth file** — a JSON list of `{"vid", "duration", "saliency_scores"}`,
-where `saliency_scores` are the per-clip `{0, 1}` highlight labels from the dataset.
+**Ground-truth file** — `annotations/label.json` from the dataset: a JSON list
+of `{"vid", "saliency_scores"}`, where `saliency_scores` are the per-clip
+`{0, 1}` highlight labels.
 
 **Run:**
 
 ```bash
 python eval.py \
     --submission_path path/to/predictions.json \
-    --gt_path        path/to/ground_truth.json \
+    --gt_path        annotations/label.json \
     --save_path      path/to/results.json
 ```
 

@@ -209,9 +209,8 @@ def eval_submission(submission, ground_truth, verbose=True, match_number=False):
         }
         ground_truth: list(dict), each dict is {
           "vid": "baseball_1",
-          "duration": 8621,
           "saliency_scores": []
-               each element corresponds to one clip (middle_frame), in {0, 1}.
+               each element corresponds to one clip, in {0, 1}.
         }
     """
     pred_vids = set([e["vid"] for e in submission])
