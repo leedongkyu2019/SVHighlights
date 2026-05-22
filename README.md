@@ -281,7 +281,7 @@ data/
 │   ├── full/720p/           # trimmed full videos, 720p
 │   └── highlight/144p/      # highlight videos, 144p
 ├── metadata/
-│   └── video_list.csv       # columns: vid, full_start, full_end
+│   └── video_list.csv       # video URLs + per-video trim boundaries
 └── annotations/
     ├── alignment/            # benchmark/align.py
     ├── filtered_frame_idx.json   # benchmark/filter_frames.py

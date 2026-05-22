@@ -9,11 +9,10 @@ The boundary times are obtained from a single boundary judgment per video,
 following the per-sport game start/end cues described in the paper
 (Appendix Table 11).
 
-Metadata CSV format (one row per video):
-    vid,full_start,full_end
-    soccer_1,123.0,7421.5
-    ...
-where ``full_start`` / ``full_end`` are in seconds.
+Metadata CSV format -- the dataset's ``video_list.csv`` (one row per video):
+    vid,full_link,full_length,full_start,full_end,hl_link,hl_length
+This script uses ``vid`` and the trim boundaries ``full_start`` / ``full_end``
+(in seconds); the remaining columns are ignored.
 """
 import argparse
 import os
@@ -57,7 +56,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Trim full-length videos to actual game footage (Section 3.2).")
     parser.add_argument("--video_list", type=str, required=True,
-                        help="Metadata CSV with columns: vid, full_start, full_end.")
+                        help="Dataset video_list.csv (uses columns: vid, full_start, full_end).")
     parser.add_argument("--src_dir", type=str, required=True,
                         help="Directory containing the raw (untrimmed) full videos.")
     parser.add_argument("--dst_dir", type=str, required=True,
