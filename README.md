@@ -160,8 +160,7 @@ huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir 
 | `annotations/whisper/` | `tf_selector/transcribe.py` | Word-level WhisperX transcripts. |
 | `annotations/segments/` | `tf_selector/segment.py` | Context-aware segments (2-minute maximum length). |
 
-**Features** (QVHighlights-style; `metadata_<sport>.jsonl` holds the per-clip
-highlight labels)
+**Features** (QVHighlights-style)
 
 | Feature | Directory | Extractor |
 |---|---|---|
