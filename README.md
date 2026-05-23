@@ -274,28 +274,27 @@ python eval.py \
 
 ## 📁 Data Layout
 
-When you run the preprocessing pipeline yourself, both `benchmark/` and
-`tf_selector/` use the following working directory layout:
+The Hugging Face dataset is organized as follows:
 
 ```
 data/
-├── videos/
-│   ├── full_raw/            # raw downloaded full videos (input to trim_video.py)
-│   ├── full/144p/           # trimmed full videos, 144p
-│   ├── full/720p/           # trimmed full videos, 720p
-│   └── highlight/144p/      # highlight videos, 144p
 ├── metadata/
 │   └── video_list.csv       # video URLs + per-video trim boundaries
-└── annotations/
-    ├── alignment/            # benchmark/align.py
-    ├── filtered_frame_idx.json   # benchmark/filter_frames.py
-    ├── label.json            # benchmark/labeling.py
-    ├── shots/                # tf_selector/shot_boundary.py
-    ├── whisper/              # tf_selector/transcribe.py
-    ├── whisper_all/          # tf_selector/transcribe.py
-    ├── segments/             # tf_selector/segment.py
-    ├── volume.json           # tf_selector/volume.py
-    └── minmax_volume.json    # tf_selector/volume_minmax.py
+├── annotations/
+│   ├── alignment/            # benchmark/align.py
+│   ├── filtered_frame_idx.json   # benchmark/filter_frames.py
+│   ├── label.json            # benchmark/labeling.py
+│   ├── shots/                # tf_selector/shot_boundary.py
+│   ├── whisper/              # tf_selector/transcribe.py
+│   ├── segments/             # tf_selector/segment.py
+│   ├── volume.json           # tf_selector/volume.py
+│   └── minmax_volume.json    # tf_selector/volume_minmax.py
+└── features/
+    └── <sport>/
+        ├── vid_clip/         # HERO video CLIP features
+        ├── vid_slowfast/     # HERO video SlowFast features
+        ├── txt_clip/         # HERO query CLIP features
+        └── aud_pann/         # PANN audio features
 ```
 
 Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
