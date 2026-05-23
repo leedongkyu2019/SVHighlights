@@ -156,7 +156,7 @@ huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir 
 | Artifact | Produced by | Description |
 |---|---|---|
 | `annotations/alignment/` | `benchmark/align.py` | Per-video raw PSNR alignment between highlight clips and full-video frames. |
-| `annotations/filtered_frame_idx.json` | `benchmark/filter_frames.py` + manual filtering | Final aligned frame index per highlight clip. |
+| `annotations/all_filtered_frame_idx.json` | `benchmark/filter_frames.py` + manual filtering | Final aligned frame index per highlight clip. |
 | `annotations/label.json` | `benchmark/labeling.py` | Per-clip `{0, 1}` highlight labels (one score per 2-second clip) — the evaluation ground truth. |
 | `annotations/shots/` | `tf_selector/shot_boundary.py` | Per-video shot-boundary detection (start/end frame index per shot). |
 | `annotations/whisper/` | `tf_selector/transcribe.py` | Word-level WhisperX transcripts. |
@@ -282,7 +282,7 @@ data/
 │   └── video_list.csv       # video URLs + per-video trim boundaries
 ├── annotations/
 │   ├── alignment/            # benchmark/align.py
-│   ├── filtered_frame_idx.json   # benchmark/filter_frames.py
+│   ├── all_filtered_frame_idx.json   # benchmark/filter_frames.py + manual filtering
 │   ├── label.json            # benchmark/labeling.py
 │   ├── shots/                # tf_selector/shot_boundary.py
 │   ├── whisper/              # tf_selector/transcribe.py

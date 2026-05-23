@@ -56,11 +56,11 @@ python align.py \
 # 3. Automatic PSNR filtering (§3.3.3)
 python filter_frames.py \
     --alignment_dir data/annotations/alignment \
-    --output data/annotations/filtered_frame_idx.json
+    --output data/annotations/all_filtered_frame_idx.json
 
 # 4. Generate per-clip highlight labels (§3.4)
 python labeling.py \
-    --filtered_json data/annotations/filtered_frame_idx.json \
+    --filtered_json data/annotations/all_filtered_frame_idx.json \
     --video_dir data/videos/full/144p \
     --output data/annotations/label.json
 ```
@@ -70,14 +70,14 @@ python labeling.py \
 ```bash
 # Matching quality — remaining rate (Table 2). Add --full_metrics for PSNR/SSIM.
 python eval_matching_quality.py \
-    --filtered_json data/annotations/filtered_frame_idx.json \
+    --filtered_json data/annotations/all_filtered_frame_idx.json \
     --full_dir data/videos/full/144p \
     --highlight_dir data/videos/highlight/144p \
     --output_dir data/eval/matching_quality
 
 # CLIP similarity (Table 2)
 python eval_clip_similarity.py \
-    --filtered_json data/annotations/filtered_frame_idx.json \
+    --filtered_json data/annotations/all_filtered_frame_idx.json \
     --full_dir data/videos/full/144p \
     --highlight_dir data/videos/highlight/144p \
     --output_dir data/eval/clip_similarity
