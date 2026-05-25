@@ -31,19 +31,6 @@ Inference (run from inside `tf_selector/` — the scripts import sibling modules
 | 7 | `main.py` | §4.3 | LLM-based per-segment saliency scoring (Llama-3-8B-Instruct). |
 | 8 | `parse.py` | §4.3 | Parse the LLM output into the per-clip saliency-score JSON consumed by `eval.py`. |
 
-## Setup
-
-`benchmark/` and `tf_selector/` share a single conda environment — see
-[the root README](../README.md#environment-setup) for setup instructions,
-including TransNet V2 (needed by `shot_boundary.py`) and WhisperX (needed by
-`transcribe.py`).
-
-## Data layout
-
-See [the root README](../README.md#data-layout) for the directory layout used
-by the preprocessing pipeline, and its [Dataset](../README.md#dataset) section
-for the released annotations and features.
-
 ## Usage
 
 ```bash
