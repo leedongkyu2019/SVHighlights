@@ -13,7 +13,7 @@ itself see [`../benchmark/`](../benchmark/).
 > to re-run them to regenerate the artifacts yourself. To evaluate TF-SELECTOR
 > with the released artifacts, jump straight to steps 7–8.
 
-Preprocessing (cwd-independent — call from anywhere) — **all optional**:
+Preprocessing — **all optional** (every output is released under `annotations/`):
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
@@ -22,19 +22,19 @@ Preprocessing (cwd-independent — call from anywhere) — **all optional**:
 | 3 | `segment.py` | §4.1 | Merge shots + transcripts into context-aware segments. **Optional** — released as `annotations/segments/`. |
 | 4 | `volume.py` | §4.3 | Per-clip (2-second) audio loudness in dBFS. **Optional** — released as `annotations/volume.json`. |
 | 5 | `volume_minmax.py` | §4.3 | Normalize the dBFS values to the [0, 1] range used by the scoring LLM. **Optional** — released as `annotations/minmax_volume.json`. |
+| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — released as `annotations/segment_caption.json`. |
 
 Inference (run from inside `tf_selector/` — the scripts import sibling modules `util`, `dataset`, `model.*`):
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
-| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — released as `annotations/segment_caption.json`. |
 | 7 | `main.py` | §4.3 | LLM-based per-segment saliency scoring (Llama-3-8B-Instruct). |
 | 8 | `parse.py` | §4.3 | Parse the LLM output into the per-clip saliency-score JSON consumed by `eval.py`. |
 
 ## Usage
 
 ```bash
-# Steps 1–5 are OPTIONAL — every output is already released under annotations/
+# Steps 1–6 are OPTIONAL — every output is already released under annotations/
 # in the Hugging Face dataset. Run them only to regenerate the artifacts.
 
 # 1. Shot boundary detection (§4.1)
@@ -65,18 +65,8 @@ python volume.py \
 python volume_minmax.py \
     --volume_dir data/annotations/volume \
     --output data/annotations/volume_norm.json
-```
 
-Every preprocessing script accepts `--sports` to restrict processing to a
-subset of sports, e.g. `--sports soccer basketball`.
-
-```bash
-# Inference — run from inside tf_selector/ (sibling-module imports).
-cd tf_selector
-
-# 6. (Optional) Segment-level captioning (§4.2)
-#    We release the VLM output as annotations/segment_caption.json; skip this
-#    step and pass the released file to main.py if you do not need to recompute.
+# 6. Segment-level captioning (§4.2) — run from inside tf_selector/
 python segment_captioning.py \
     --meta_path ../data/metadata/video_list.csv \
     --video_path path/to/frames \
@@ -84,6 +74,13 @@ python segment_captioning.py \
     --mode segment_captioning \
     --output_path output --output_filename segment_caption.json \
     --model OpenGVLab/InternVL2_5-8B --save_every 10
+```
+
+Every preprocessing script accepts `--sports` to restrict processing to a
+subset of sports, e.g. `--sports soccer basketball`.
+
+```bash
+# Inference — run from inside tf_selector/ (sibling-module imports).
 
 # 7. LLM-based per-segment saliency scoring (§4.3)
 #    (use ../data/annotations/segment_caption.json, or output/segment_caption.json from step 6)
