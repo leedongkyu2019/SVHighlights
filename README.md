@@ -154,6 +154,36 @@ features, and the annotation labels, as a Hugging Face dataset:
 huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir ./data
 ```
 
+**Data layout**
+
+The Hugging Face dataset is organized as follows:
+
+```
+data/
+├── metadata/
+│   └── video_list.csv       # video URLs + per-video trim boundaries
+├── annotations/
+│   ├── alignment/            # benchmark/align.py
+│   ├── all_filtered_frame_idx.json   # benchmark/filter_frames.py + manual filtering
+│   ├── label.json            # benchmark/labeling.py
+│   ├── shots/                # tf_selector/shot_boundary.py
+│   ├── whisper/              # tf_selector/transcribe.py
+│   ├── segments/             # tf_selector/segment.py
+│   ├── segment_caption.json  # tf_selector/segment_captioning.py (VLM)
+│   ├── volume.json           # tf_selector/volume.py
+│   └── minmax_volume.json    # tf_selector/volume_minmax.py
+└── features/
+    └── <sport>/
+        ├── vid_clip/         # HERO video CLIP features
+        ├── vid_slowfast/     # HERO video SlowFast features
+        ├── txt_clip/         # HERO query CLIP features
+        └── aud_pann/         # PANN audio features
+```
+
+Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
+`american_football`, `baseball`, `basketball`, `ice_hockey`, `race`, `rugby`,
+`soccer`, `volleyball`.
+
 **Annotations**
 
 | Artifact | Produced by | Description |
@@ -220,59 +250,20 @@ Tested with Python 3.9, PyTorch 2.4.1 (CUDA 12.1), and ffmpeg 4.2.9.
 
 ## 🚀 Usage
 
-The preprocessing runs as two pipelines. Every script accepts `--sports` to
-restrict processing to a subset of sports, and `-h` for the full argument list.
+The code is split into two pipelines — see each directory's `README.md` for
+the full step-by-step commands and CLI arguments.
 
-**Dataset construction** ([`benchmark/`](benchmark/README.md))
+- **Dataset construction** — [`benchmark/README.md`](benchmark/README.md):
+  video trimming, highlight alignment, PSNR filtering, and per-clip label
+  generation (paper Section 3).
+- **TF-SELECTOR baseline** — [`tf_selector/README.md`](tf_selector/README.md):
+  preprocessing (shot boundaries, ASR, context-aware segmentation, audio
+  volume, VLM segment captioning) and training-free inference (LLM saliency
+  scoring + prediction parsing) (paper Section 4). All preprocessing outputs
+  are released under `annotations/`, so these steps are optional.
 
-```bash
-python benchmark/trim_video.py    --video_list ... --src_dir ... --dst_dir ...
-python benchmark/align.py         --full_dir ... --highlight_dir ... --output_dir ...
-python benchmark/filter_frames.py --alignment_dir ... --output ...
-python benchmark/labeling.py      --filtered_json ... --video_dir ... --output ...
-```
-
-**TF-SELECTOR preprocessing** ([`tf_selector/`](tf_selector/README.md)) — **all
-outputs released** under `annotations/` in the dataset, so these steps are
-**optional** (run only to regenerate the artifacts):
-
-```bash
-python tf_selector/shot_boundary.py  --video_dir ... --output_dir ... --transnetv2_script ...   # released as annotations/shots/
-python tf_selector/transcribe.py     --video_dir ... --whisper_dir ... --whisper_all_dir ...    # released as annotations/whisper/
-python tf_selector/segment.py        --whisper_dir ... --video_dir ... --shot_dir ... --output_dir ...   # released as annotations/segments/
-python tf_selector/volume.py         --video_dir ... --output_dir ...                            # released as annotations/volume.json
-python tf_selector/volume_minmax.py  --volume_dir ... --output ...                               # released as annotations/minmax_volume.json
-```
-
-**TF-SELECTOR inference** ([`tf_selector/`](tf_selector/README.md)) — run from
-inside the `tf_selector/` directory (the inference scripts import sibling
-modules `util`, `dataset`, and `model.*`):
-
-```bash
-cd tf_selector
-# 1. (Optional) Segment-level captioning with a VLM.
-#    We release the VLM output as annotations/segment_caption.json, so you can
-#    skip this step and pass the released file straight to main.py below.
-python segment_captioning.py \
-    --meta_path ../data/metadata/video_list.csv \
-    --video_path path/to/frames \
-    --segment_path ../data/annotations/segments.json \
-    --mode segment_captioning \
-    --output_path output --output_filename segment_caption.json \
-    --model OpenGVLab/InternVL2_5-8B --save_every 10
-# 2. LLM-based per-segment saliency scoring
-#    (use the released ../data/annotations/segment_caption.json, or output/segment_caption.json from step 1)
-python main.py \
-    --meta_path ../data/metadata/video_list.csv \
-    --volume_path ../data/annotations/minmax_volume.json \
-    --segment_path ../data/annotations/segment_caption.json \
-    --mode highlight_detection \
-    --output_path output --output_filename pred.json \
-    --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10
-# 3. Parse LLM output into the per-clip saliency-score JSON consumed by eval.py
-python parse.py --pred_path output/pred.json --save_path output/predictions.json
-cd ..
-```
+Every script accepts `--sports` to restrict processing to a subset of sports
+and `-h` for the full argument list.
 
 ## 📊 Evaluation
 
@@ -316,36 +307,6 @@ python eval.py \
 | `HL-Hit1` | Whether the top-scored clip is a ground-truth highlight |
 | `HL-Hitk` | Hit rate among the top-K clips (K = number of GT highlight clips) |
 | `HL-IoU` | Temporal overlap between the top-K predictions and GT highlights |
-
-## 📁 Data Layout
-
-The Hugging Face dataset is organized as follows:
-
-```
-data/
-├── metadata/
-│   └── video_list.csv       # video URLs + per-video trim boundaries
-├── annotations/
-│   ├── alignment/            # benchmark/align.py
-│   ├── all_filtered_frame_idx.json   # benchmark/filter_frames.py + manual filtering
-│   ├── label.json            # benchmark/labeling.py
-│   ├── shots/                # tf_selector/shot_boundary.py
-│   ├── whisper/              # tf_selector/transcribe.py
-│   ├── segments/             # tf_selector/segment.py
-│   ├── segment_caption.json  # tf_selector/segment_captioning.py (VLM)
-│   ├── volume.json           # tf_selector/volume.py
-│   └── minmax_volume.json    # tf_selector/volume_minmax.py
-└── features/
-    └── <sport>/
-        ├── vid_clip/         # HERO video CLIP features
-        ├── vid_slowfast/     # HERO video SlowFast features
-        ├── txt_clip/         # HERO query CLIP features
-        └── aud_pann/         # PANN audio features
-```
-
-Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
-`american_football`, `baseball`, `basketball`, `ice_hockey`, `race`, `rugby`,
-`soccer`, `volleyball`.
 
 ## 📩 Request Frame Data
 
