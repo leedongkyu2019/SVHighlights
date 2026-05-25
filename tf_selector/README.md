@@ -13,6 +13,8 @@ itself see [`../benchmark/`](../benchmark/).
 > to re-run them to regenerate the artifacts yourself. To evaluate TF-SELECTOR
 > with the released artifacts, jump straight to steps 7–8.
 
+All scripts can be invoked from any working directory.
+
 Preprocessing — **all optional** (every output is released under `annotations/`):
 
 | Step | Script | Paper | Description |
@@ -24,7 +26,7 @@ Preprocessing — **all optional** (every output is released under `annotations/
 | 5 | `volume_minmax.py` | §4.3 | Normalize the dBFS values to the [0, 1] range used by the scoring LLM. **Optional** — released as `annotations/minmax_volume.json`. |
 | 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — released as `annotations/segment_caption.json`. |
 
-Inference (run from inside `tf_selector/` — the scripts import sibling modules `util`, `dataset`, `model.*`):
+Inference:
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
@@ -66,7 +68,7 @@ python volume_minmax.py \
     --volume_dir data/annotations/volume \
     --output data/annotations/volume_norm.json
 
-# 6. Segment-level captioning (§4.2) — run from inside tf_selector/
+# 6. Segment-level captioning (§4.2)
 python segment_captioning.py \
     --meta_path ../data/metadata/video_list.csv \
     --video_path path/to/frames \
@@ -80,8 +82,6 @@ Every preprocessing script accepts `--sports` to restrict processing to a
 subset of sports, e.g. `--sports soccer basketball`.
 
 ```bash
-# Inference — run from inside tf_selector/ (sibling-module imports).
-
 # 7. LLM-based per-segment saliency scoring (§4.3)
 #    (use ../data/annotations/segment_caption.json, or output/segment_caption.json from step 6)
 python main.py \
