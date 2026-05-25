@@ -1,14 +1,14 @@
-# SVHighlights — TF-SELECTOR preprocessing
+# SVHighlights — TF-SELECTOR
 
-Preprocessing code that extracts the inputs required by the **TF-SELECTOR**
-baseline (paper Section 4). For reproducing the SVHighlights dataset itself see
-[`../benchmark/`](../benchmark/).
-
-TF-SELECTOR is a training-free pipeline; this directory covers only its
-preprocessing stages. The captioning / scoring / evaluation stages are part of
-the model code and are maintained separately.
+End-to-end code for the **TF-SELECTOR** baseline (paper Section 4):
+preprocessing (shot boundaries, ASR, context-aware segmentation, audio volume)
+followed by training-free inference (VLM segment captioning, LLM saliency
+scoring, and prediction parsing). For reproducing the SVHighlights dataset
+itself see [`../benchmark/`](../benchmark/).
 
 ## Pipeline
+
+Preprocessing (cwd-independent — call from anywhere):
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
@@ -17,6 +17,14 @@ the model code and are maintained separately.
 | 3 | `segment.py` | §4.1 | Merge shots + transcripts into context-aware segments. |
 | 4 | `volume.py` | §4.3 | Per-clip (2-second) audio loudness in dBFS. |
 | 5 | `volume_minmax.py` | §4.3 | Normalize the dBFS values to the [0, 1] range used by the scoring LLM. |
+
+Inference (run from inside `tf_selector/` — the scripts import sibling modules `util`, `dataset`, `model.*`):
+
+| Step | Script | Paper | Description |
+|---|---|---|---|
+| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). |
+| 7 | `main.py` | §4.3 | LLM-based per-segment saliency scoring (Llama-3-8B-Instruct). |
+| 8 | `parse.py` | §4.3 | Parse the LLM output into the per-clip saliency-score JSON consumed by `eval.py`. |
 
 ## Setup
 
@@ -64,8 +72,34 @@ python volume_minmax.py \
     --output data/annotations/volume_norm.json
 ```
 
-Every script accepts `--sports` to restrict processing to a subset of sports,
-e.g. `--sports soccer basketball`.
+Every preprocessing script accepts `--sports` to restrict processing to a
+subset of sports, e.g. `--sports soccer basketball`.
+
+```bash
+# Inference — run from inside tf_selector/ (sibling-module imports).
+cd tf_selector
+
+# 6. Segment-level captioning (§4.2)
+python segment_captioning.py \
+    --meta_path ../data/metadata/video_list.csv \
+    --video_path path/to/frames \
+    --segment_path ../data/annotations/segments.json \
+    --mode segment_captioning \
+    --output_path output --output_filename segment_caption.json \
+    --model OpenGVLab/InternVL2_5-8B --save_every 10
+
+# 7. LLM-based per-segment saliency scoring (§4.3)
+python main.py \
+    --meta_path ../data/metadata/video_list.csv \
+    --volume_path ../data/annotations/minmax_volume.json \
+    --segment_path output/segment_caption.json \
+    --mode highlight_detection \
+    --output_path output --output_filename pred.json \
+    --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10
+
+# 8. Parse the LLM output into the per-clip saliency-score format eval.py expects
+python parse.py --pred_path output/pred.json --save_path output/predictions.json
+```
 
 ## Notes
 
@@ -73,3 +107,9 @@ e.g. `--sports soccer basketball`.
   maximum segment length from §5.1.1. It is exposed as a CLI argument.
 - **TransNet V2** is a third-party tool and is not bundled here; clone it
   (see Setup) and pass its inference script via `--transnetv2_script`.
+- **Hugging Face token** — `main.py` and `segment_captioning.py` log in to
+  the Hub at startup (`login(token='your_huggingface_token')`); replace the
+  placeholder with your own token before running.
+- **Frame directory** — `parse.py` reads the per-video frame directory at
+  `path/to/frame/{vid}` (used to determine the video length); replace the
+  placeholder with the directory that holds your per-video frames.

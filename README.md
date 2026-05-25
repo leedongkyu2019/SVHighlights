@@ -126,14 +126,16 @@ video highlight det**ECTOR**) is a training-free baseline with three stages:
 
 ## 🗂️ Repository Structure
 
-The preprocessing code is split into two parts:
+The code is split into two parts:
 
 - **[`benchmark/`](benchmark/)** — **SVHighlights dataset construction** (paper
   Section 3): video trimming, highlight alignment, filtering, and label
   generation, plus the alignment-quality evaluation tools.
-- **[`tf_selector/`](tf_selector/)** — **TF-SELECTOR baseline preprocessing**
-  (paper Section 4): shot-boundary detection, speech recognition,
-  context-aware segmentation, and audio-volume extraction.
+- **[`tf_selector/`](tf_selector/)** — **TF-SELECTOR baseline** (paper Section 4):
+  preprocessing (shot-boundary detection, speech recognition, context-aware
+  segmentation, audio-volume extraction) and inference (segment captioning
+  with a VLM, LLM-based saliency scoring, and prediction parsing into the
+  per-clip saliency-score format consumed by `eval.py`).
 
 See each directory's `README.md` for the full pipeline and usage instructions.
 Highlight-detection predictions are scored with **[`eval.py`](eval.py)** — see
@@ -190,7 +192,10 @@ conda activate svhighlights
 # ffmpeg / ffprobe — used by almost every script
 conda install -c conda-forge ffmpeg -y
 
-# Python dependencies (covers both benchmark/ and tf_selector/)
+# PyTorch with CUDA 12.1 — required by tf_selector/ model inference
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+
+# Python dependencies (covers benchmark/ and tf_selector/ — preprocessing + model inference)
 pip install -r requirements.txt
 
 # External packages installed from source:
@@ -204,6 +209,12 @@ pipeline was run with PyTorch 2.4.1 / CUDA 12.1). The three external packages
 are each needed by only one script — skip any you do not plan to run.
 
 Tested with Python 3.9, PyTorch 2.4.1 (CUDA 12.1), and ffmpeg 4.2.9.
+
+> **Note** — `tf_selector/main.py` and `tf_selector/segment_captioning.py` log in
+> to the Hugging Face Hub at startup; replace
+> `login(token='your_huggingface_token')` near the top of each file with your
+> own token. In `tf_selector/parse.py`, replace the `path/to/frame/{vid}`
+> placeholder with the directory that contains your per-video frames.
 
 ## 🚀 Usage
 
@@ -227,6 +238,33 @@ python tf_selector/transcribe.py     --video_dir ... --whisper_dir ... --whisper
 python tf_selector/segment.py        --whisper_dir ... --video_dir ... --shot_dir ... --output_dir ...
 python tf_selector/volume.py         --video_dir ... --output_dir ...
 python tf_selector/volume_minmax.py  --volume_dir ... --output ...
+```
+
+**TF-SELECTOR inference** ([`tf_selector/`](tf_selector/README.md)) — run from
+inside the `tf_selector/` directory (the inference scripts import sibling
+modules `util`, `dataset`, and `model.*`):
+
+```bash
+cd tf_selector
+# 1. Segment-level captioning with a VLM
+python segment_captioning.py \
+    --meta_path ../data/metadata/video_list.csv \
+    --video_path path/to/frames \
+    --segment_path ../data/annotations/segments.json \
+    --mode segment_captioning \
+    --output_path output --output_filename segment_caption.json \
+    --model OpenGVLab/InternVL2_5-8B --save_every 10
+# 2. LLM-based per-segment saliency scoring
+python main.py \
+    --meta_path ../data/metadata/video_list.csv \
+    --volume_path ../data/annotations/minmax_volume.json \
+    --segment_path output/segment_caption.json \
+    --mode highlight_detection \
+    --output_path output --output_filename pred.json \
+    --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10
+# 3. Parse LLM output into the per-clip saliency-score JSON consumed by eval.py
+python parse.py --pred_path output/pred.json --save_path output/predictions.json
+cd ..
 ```
 
 ## 📊 Evaluation
