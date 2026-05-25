@@ -347,7 +347,7 @@ Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
 `american_football`, `baseball`, `basketball`, `ice_hockey`, `race`, `rugby`,
 `soccer`, `volleyball`.
 
-## 📩 Request 1 fps Frame Data
+## 📩 Request Frame Data
 
 We do **not** redistribute the original sports broadcasts. For research that
 needs the raw visual content, we share per-video frames sampled at **1 frame
