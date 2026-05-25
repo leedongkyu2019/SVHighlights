@@ -8,21 +8,26 @@ itself see [`../benchmark/`](../benchmark/).
 
 ## Pipeline
 
-Preprocessing (cwd-independent — call from anywhere):
+> **All preprocessing and captioning outputs (steps 1–6) are released with the
+> dataset** under `annotations/`, so steps 1–6 are **optional** — you only need
+> to re-run them to regenerate the artifacts yourself. To evaluate TF-SELECTOR
+> with the released artifacts, jump straight to steps 7–8.
+
+Preprocessing (cwd-independent — call from anywhere) — **all optional**:
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
-| 1 | `shot_boundary.py` | §4.1 | Detect shot boundaries with TransNet V2. |
-| 2 | `transcribe.py` | §4.1 | Word-level speech recognition with WhisperX. |
-| 3 | `segment.py` | §4.1 | Merge shots + transcripts into context-aware segments. |
-| 4 | `volume.py` | §4.3 | Per-clip (2-second) audio loudness in dBFS. |
-| 5 | `volume_minmax.py` | §4.3 | Normalize the dBFS values to the [0, 1] range used by the scoring LLM. |
+| 1 | `shot_boundary.py` | §4.1 | Detect shot boundaries with TransNet V2. **Optional** — released as `annotations/shots/`. |
+| 2 | `transcribe.py` | §4.1 | Word-level speech recognition with WhisperX. **Optional** — released as `annotations/whisper/`. |
+| 3 | `segment.py` | §4.1 | Merge shots + transcripts into context-aware segments. **Optional** — released as `annotations/segments/`. |
+| 4 | `volume.py` | §4.3 | Per-clip (2-second) audio loudness in dBFS. **Optional** — released as `annotations/volume.json`. |
+| 5 | `volume_minmax.py` | §4.3 | Normalize the dBFS values to the [0, 1] range used by the scoring LLM. **Optional** — released as `annotations/minmax_volume.json`. |
 
 Inference (run from inside `tf_selector/` — the scripts import sibling modules `util`, `dataset`, `model.*`):
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
-| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — the VLM output is released as `annotations/segment_caption.json`. |
+| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — released as `annotations/segment_caption.json`. |
 | 7 | `main.py` | §4.3 | LLM-based per-segment saliency scoring (Llama-3-8B-Instruct). |
 | 8 | `parse.py` | §4.3 | Parse the LLM output into the per-clip saliency-score JSON consumed by `eval.py`. |
 
@@ -42,6 +47,9 @@ for the released annotations and features.
 ## Usage
 
 ```bash
+# Steps 1–5 are OPTIONAL — every output is already released under annotations/
+# in the Hugging Face dataset. Run them only to regenerate the artifacts.
+
 # 1. Shot boundary detection (§4.1)
 python shot_boundary.py \
     --video_dir data/videos/full/144p \
