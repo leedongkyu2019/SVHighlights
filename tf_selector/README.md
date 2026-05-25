@@ -22,7 +22,7 @@ Inference (run from inside `tf_selector/` — the scripts import sibling modules
 
 | Step | Script | Paper | Description |
 |---|---|---|---|
-| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). |
+| 6 | `segment_captioning.py` | §4.2 | Segment-level captioning with a VLM (InternVL2_5-8B). **Optional** — the VLM output is released as `annotations/segment_caption.json`. |
 | 7 | `main.py` | §4.3 | LLM-based per-segment saliency scoring (Llama-3-8B-Instruct). |
 | 8 | `parse.py` | §4.3 | Parse the LLM output into the per-clip saliency-score JSON consumed by `eval.py`. |
 
@@ -79,7 +79,9 @@ subset of sports, e.g. `--sports soccer basketball`.
 # Inference — run from inside tf_selector/ (sibling-module imports).
 cd tf_selector
 
-# 6. Segment-level captioning (§4.2)
+# 6. (Optional) Segment-level captioning (§4.2)
+#    We release the VLM output as annotations/segment_caption.json; skip this
+#    step and pass the released file to main.py if you do not need to recompute.
 python segment_captioning.py \
     --meta_path ../data/metadata/video_list.csv \
     --video_path path/to/frames \
@@ -89,10 +91,11 @@ python segment_captioning.py \
     --model OpenGVLab/InternVL2_5-8B --save_every 10
 
 # 7. LLM-based per-segment saliency scoring (§4.3)
+#    (use ../data/annotations/segment_caption.json, or output/segment_caption.json from step 6)
 python main.py \
     --meta_path ../data/metadata/video_list.csv \
     --volume_path ../data/annotations/minmax_volume.json \
-    --segment_path output/segment_caption.json \
+    --segment_path ../data/annotations/segment_caption.json \
     --mode highlight_detection \
     --output_path output --output_filename pred.json \
     --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10

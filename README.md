@@ -163,6 +163,7 @@ huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir 
 | `annotations/shots/` | `tf_selector/shot_boundary.py` | Per-video shot-boundary detection (start/end frame index per shot). |
 | `annotations/whisper/` | `tf_selector/transcribe.py` | Word-level WhisperX transcripts. |
 | `annotations/segments/` | `tf_selector/segment.py` | Context-aware segments (2-minute maximum length). |
+| `annotations/segment_caption.json` | `tf_selector/segment_captioning.py` | Per-segment captions from the InternVL2_5-8B VLM (input to the LLM scorer). |
 | `annotations/volume.json` | `tf_selector/volume.py` | Per-clip audio loudness (dBFS) for every video. |
 | `annotations/minmax_volume.json` | `tf_selector/volume_minmax.py` | Min-max normalized per-clip audio volume in `[0, 1]`. |
 
@@ -246,7 +247,9 @@ modules `util`, `dataset`, and `model.*`):
 
 ```bash
 cd tf_selector
-# 1. Segment-level captioning with a VLM
+# 1. (Optional) Segment-level captioning with a VLM.
+#    We release the VLM output as annotations/segment_caption.json, so you can
+#    skip this step and pass the released file straight to main.py below.
 python segment_captioning.py \
     --meta_path ../data/metadata/video_list.csv \
     --video_path path/to/frames \
@@ -255,10 +258,11 @@ python segment_captioning.py \
     --output_path output --output_filename segment_caption.json \
     --model OpenGVLab/InternVL2_5-8B --save_every 10
 # 2. LLM-based per-segment saliency scoring
+#    (use the released ../data/annotations/segment_caption.json, or output/segment_caption.json from step 1)
 python main.py \
     --meta_path ../data/metadata/video_list.csv \
     --volume_path ../data/annotations/minmax_volume.json \
-    --segment_path output/segment_caption.json \
+    --segment_path ../data/annotations/segment_caption.json \
     --mode highlight_detection \
     --output_path output --output_filename pred.json \
     --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10
@@ -325,6 +329,7 @@ data/
 │   ├── shots/                # tf_selector/shot_boundary.py
 │   ├── whisper/              # tf_selector/transcribe.py
 │   ├── segments/             # tf_selector/segment.py
+│   ├── segment_caption.json  # tf_selector/segment_captioning.py (VLM)
 │   ├── volume.json           # tf_selector/volume.py
 │   └── minmax_volume.json    # tf_selector/volume_minmax.py
 └── features/
