@@ -106,8 +106,8 @@ python parse.py --pred_path output/pred.json --save_path output/predictions.json
 - **TransNet V2** is a third-party tool and is not bundled here; clone it
   (see Setup) and pass its inference script via `--transnetv2_script`.
 - **Hugging Face token** — `main.py` and `segment_captioning.py` log in to
-  the Hub at startup (`login(token='your_huggingface_token')`); replace the
-  placeholder with your own token before running.
+  the Hub at startup via `login(token=os.environ.get('HF_TOKEN'))`; export
+  your access token before running, e.g. `export HF_TOKEN=hf_...`.
 - **Frame directory** — `parse.py` reads the per-video frame directory at
   `path/to/frame/{vid}` (used to determine the video length); replace the
   placeholder with the directory that holds your per-video frames.

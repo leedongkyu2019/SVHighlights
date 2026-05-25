@@ -6,7 +6,7 @@ from dataset import ELVHD
 
 from tqdm import tqdm
 from huggingface_hub import login
-login(token='your_huggingface_token')
+login(token=os.environ.get('HF_TOKEN'))
 
 
 def launch():
