@@ -25,19 +25,6 @@ Code for reproducing the **SVHighlights** dataset from the source videos
 > (not needed for dataset construction — `labeling.py` derives the clip count
 > directly from the video duration).
 
-## Setup
-
-`benchmark/` and `tf_selector/` share a single conda environment — see
-[the root README](../README.md#environment-setup) for setup instructions.
-`eval_clip_similarity.py` additionally needs the CLIP package (also covered
-there).
-
-## Data layout
-
-See [the root README](../README.md#data-layout) for the directory layout used
-by the preprocessing pipeline, and its [Dataset](../README.md#dataset) section
-for the released annotations and features.
-
 ## Usage
 
 ```bash
