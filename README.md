@@ -250,13 +250,13 @@ Tested with Python 3.9, PyTorch 2.4.1 (CUDA 12.1), and ffmpeg 4.2.9.
 
 ## 🚀 Usage
 
-The code is split into two pipelines — see each directory's `README.md` for
-the full step-by-step commands and CLI arguments.
+The code is split into two pipelines — see each directory for the full
+step-by-step commands and CLI arguments.
 
-- **Dataset construction** — [`benchmark/README.md`](benchmark/README.md):
+- **Dataset construction** — [`benchmark/`](benchmark/):
   video trimming, highlight alignment, PSNR filtering, and per-clip label
   generation (paper Section 3).
-- **TF-SELECTOR baseline** — [`tf_selector/README.md`](tf_selector/README.md):
+- **TF-SELECTOR baseline** — [`tf_selector/`](tf_selector/):
   preprocessing (shot boundaries, ASR, context-aware segmentation, audio
   volume, VLM segment captioning) and training-free inference (LLM saliency
   scoring + prediction parsing) (paper Section 4). All preprocessing outputs
