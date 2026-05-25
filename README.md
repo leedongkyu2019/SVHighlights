@@ -346,3 +346,16 @@ data/
 Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
 `american_football`, `baseball`, `basketball`, `ice_hockey`, `race`, `rugby`,
 `soccer`, `volleyball`.
+
+## 📩 Request 1 fps Frame Data
+
+We do **not** redistribute the original sports broadcasts. For research that
+needs the raw visual content, we share per-video frames sampled at **1 frame
+per second (1 fps)** on request, subject to a research-only, no-redistribution
+agreement.
+
+> 📩 **[Request access to the frame data](https://docs.google.com/forms/d/e/1FAIpQLSctZ6XMCND3HJqR8huV6k7N4phbSRTIu7vQ0cT6hPk2QHjkOQ/viewform)**
+
+Approved requests receive a Google Drive link with a 7-day access window. For
+any issue with the form, please email `leedongkyu2019@unist.ac.kr` or open an
+issue on this repository.
