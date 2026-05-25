@@ -54,6 +54,7 @@ strategy can effectively scale to hour-long videos.
 
 ## 🔥 Update
 
+- **[2026.05.25]** 🤖 Released the TF-SELECTOR model code.
 - **[2026.05.23]** 🚀 Released the SVHighlights dataset (annotations & features) on Hugging Face and the preprocessing code.
 - **[2026.05.17]** 🎉 SVHighlights was accepted to **KDD 2026** (Datasets & Benchmarks Track).
 
@@ -201,21 +202,21 @@ pip install -r requirements.txt
 
 # External packages installed from source:
 pip install git+https://github.com/openai/CLIP.git        # benchmark/eval_clip_similarity.py
-pip install git+https://github.com/m-bain/whisperX.git    # tf_selector/transcribe.py
 git clone https://github.com/soCzech/TransNetV2           # tf_selector/shot_boundary.py
 ```
 
 For GPU use, install the PyTorch build that matches your CUDA version (the
-pipeline was run with PyTorch 2.4.1 / CUDA 12.1). The three external packages
-are each needed by only one script — skip any you do not plan to run.
+pipeline was run with PyTorch 2.4.1 / CUDA 12.1). The two external packages
+above are each needed by only one script — skip either you do not plan to run.
 
 Tested with Python 3.9, PyTorch 2.4.1 (CUDA 12.1), and ffmpeg 4.2.9.
 
-> **Note** — `tf_selector/main.py` and `tf_selector/segment_captioning.py` log in
-> to the Hugging Face Hub at startup; replace
-> `login(token='your_huggingface_token')` near the top of each file with your
-> own token. In `tf_selector/parse.py`, replace the `path/to/frame/{vid}`
-> placeholder with the directory that contains your per-video frames.
+> **Note** — `tf_selector/main.py` and `tf_selector/segment_captioning.py` log
+> in to the Hugging Face Hub at startup via
+> `login(token=os.environ.get('HF_TOKEN'))`; export your access token before
+> running, e.g. `export HF_TOKEN=hf_...`. In `tf_selector/parse.py`, replace
+> the `path/to/frame/{vid}` placeholder with the directory that contains your
+> per-video frames.
 
 ## 🚀 Usage
 

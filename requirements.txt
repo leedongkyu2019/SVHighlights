@@ -9,8 +9,6 @@
 #   * ffmpeg / ffprobe  -- conda install -c conda-forge ffmpeg
 #   * CLIP              -- pip install git+https://github.com/openai/CLIP.git
 #                          (only for benchmark/eval_clip_similarity.py)
-#   * WhisperX          -- pip install git+https://github.com/m-bain/whisperX.git
-#                          (only for tf_selector/transcribe.py)
 #   * TransNet V2       -- git clone https://github.com/soCzech/TransNetV2
 #                          (only for tf_selector/shot_boundary.py)
 #
@@ -21,6 +19,8 @@ natsort==8.4.0
 pydub
 scikit-image==0.24.0
 scikit-learn
+whisperx==3.3.1
+wrapt
 
 # --- TF-SELECTOR model inference (frozen) ---
 accelerate==1.4.0
