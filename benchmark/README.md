@@ -17,8 +17,8 @@ Code for reproducing the **SVHighlights** dataset from the source videos
 
 | Script | Paper | Description |
 |---|---|---|
-| `eval_matching_quality.py` | Table 2 | Remaining rate (and optionally PSNR/SSIM) of the alignment. |
-| `eval_clip_similarity.py` | Table 2 | CLIP similarity between aligned frame pairs. |
+| `eval_matching_quality.py` | Table 3 | Remaining rate (and optionally PSNR/SSIM) of the alignment. |
+| `eval_clip_similarity.py` | Table 3 | CLIP similarity between aligned frame pairs. |
 
 > **Not included:** video download (the dataset is released as video URLs only;
 > downloading from YouTube is the user's responsibility) and frame sampling
@@ -55,14 +55,14 @@ python labeling.py \
 ### Evaluation
 
 ```bash
-# Matching quality — remaining rate (Table 2). Add --full_metrics for PSNR/SSIM.
+# Matching quality — remaining rate (Table 3). Add --full_metrics for PSNR/SSIM.
 python eval_matching_quality.py \
     --filtered_json data/annotations/all_filtered_frame_idx.json \
     --full_dir data/videos/full/144p \
     --highlight_dir data/videos/highlight/144p \
     --output_dir data/eval/matching_quality
 
-# CLIP similarity (Table 2)
+# CLIP similarity (Table 3)
 python eval_clip_similarity.py \
     --filtered_json data/annotations/all_filtered_frame_idx.json \
     --full_dir data/videos/full/144p \
@@ -76,7 +76,7 @@ e.g. `--sports soccer basketball`.
 ## Notes
 
 - **Default parameters follow the paper.** `align.py --tau` defaults to `5`
-  (the post-processing threshold τ adopted in Table 4). `filter_frames.py
+  (the post-processing threshold τ adopted in Table 5). `filter_frames.py
   --psnr_threshold` defaults to `20`, and `labeling.py` uses 2-second clips
   with a 50% overlap threshold (§3.4). All are exposed as CLI arguments.
 - **Manual filtering.** Section 3.3.3 applies a lightweight manual refinement

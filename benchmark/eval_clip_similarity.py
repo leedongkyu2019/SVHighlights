@@ -1,4 +1,4 @@
-"""CLIP-similarity evaluation (SVHighlights, Section 3.3, Table 2).
+"""CLIP-similarity evaluation (SVHighlights, Section 3.3, Table 3).
 
 Reports the average CLIP (ViT-B/32) cosine similarity between every aligned
 highlight frame and its matched full-video frame -- a feature-level
@@ -121,7 +121,7 @@ def extract_middle_sampled_frames(video_path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Evaluate alignment quality with CLIP similarity (Table 2).")
+        description="Evaluate alignment quality with CLIP similarity (Table 3).")
     parser.add_argument("--filtered_json", type=str, required=True,
                         help="Filtered-frame-index JSON (filter_frames.py output).")
     parser.add_argument("--full_dir", type=str, required=True,

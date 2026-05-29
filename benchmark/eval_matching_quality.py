@@ -1,4 +1,4 @@
-"""Matching-quality evaluation (SVHighlights, Section 3.3, Table 2).
+"""Matching-quality evaluation (SVHighlights, Section 3.3, Table 3).
 
 Evaluates how well the highlight-alignment pipeline matched highlight clips to
 full-video frames. Two kinds of metrics are reported:
@@ -112,7 +112,7 @@ def compute_psnr_ssim(full_video_path, highlight_video_path, frame_indices):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Evaluate highlight-alignment matching quality (Table 2).")
+        description="Evaluate highlight-alignment matching quality (Table 3).")
     parser.add_argument("--filtered_json", type=str, required=True,
                         help="Filtered-frame-index JSON (filter_frames.py output).")
     parser.add_argument("--full_dir", type=str, required=True,
