@@ -31,7 +31,7 @@ SVHighlights, to the best of our knowledge, the first benchmark for highlight
 detection in extremely long sports videos, each exceeding one hour in duration,
 across multiple sports categories. SVHighlights is constructed from pairs of
 full-length sports videos and their corresponding official highlight videos
-using a highlight alignment pipeline, enabling scalable and cost-effective
+using a dataset generation pipeline, enabling scalable and cost-effective
 label generation without conventional per-clip saliency annotation. The
 benchmark comprises 320 videos spanning a wide range of sports, with an average
 duration of 2.00 hours and a total of 640.18 hours, substantially exceeding
