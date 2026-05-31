@@ -166,6 +166,8 @@ def merge_shots_with_whisper(shots, whispers, output_path, max_duration):
         json.dump(merged_shots, f, indent=4)
     print(f"Segment results saved to: {output_path}")
 
+    return merged_shots
+
 
 def build_sentences(whisper_data):
     """Group word-level transcripts into sentences (gap < 1 second)."""
@@ -215,6 +217,7 @@ def main():
     if args.merged_whisper_dir:
         os.makedirs(args.merged_whisper_dir, exist_ok=True)
 
+    all_segments = {}
     for sport in args.sports:
         whisper_files = natsorted(
             f for f in os.listdir(args.whisper_dir)
@@ -242,7 +245,13 @@ def main():
             fps = get_video_fps(video_path)
             shots = read_shot_boundaries(shot_path, fps)
             output_path = os.path.join(args.output_dir, whisper_name)
-            merge_shots_with_whisper(shots, merged_whisper, output_path, args.max_duration)
+            segments = merge_shots_with_whisper(shots, merged_whisper, output_path, args.max_duration)
+
+            all_segments[stem] = segments
+
+    with open(os.path.join(os.path.dirname(args.output_dir), "segment.json"), "w") as f:
+        json.dump(all_segments, f, indent=4)
+    print(f"All segments saved to: {os.path.join(os.path.dirname(args.output_dir), 'segment.json')}")
 
 
 if __name__ == "__main__":

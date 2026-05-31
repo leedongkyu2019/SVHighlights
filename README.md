@@ -224,11 +224,11 @@ conda activate svhighlights
 # ffmpeg / ffprobe — used by almost every script
 conda install -c conda-forge ffmpeg -y
 
-# PyTorch with CUDA 12.1 — required by tf_selector/ model inference
-pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
-
 # Python dependencies (covers benchmark/ and tf_selector/ — preprocessing + model inference)
 pip install -r requirements.txt
+
+# PyTorch with CUDA 12.1 — required by tf_selector/ model inference
+pip install torch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 --index-url https://download.pytorch.org/whl/cu121
 
 # External packages installed from source:
 pip install git+https://github.com/openai/CLIP.git        # benchmark/eval_clip_similarity.py
@@ -236,10 +236,10 @@ git clone https://github.com/soCzech/TransNetV2           # tf_selector/shot_bou
 ```
 
 For GPU use, install the PyTorch build that matches your CUDA version (the
-pipeline was run with PyTorch 2.4.1 / CUDA 12.1). The two external packages
+pipeline was run with PyTorch 2.3.1 / CUDA 12.1). The two external packages
 above are each needed by only one script — skip either you do not plan to run.
 
-Tested with Python 3.9, PyTorch 2.4.1 (CUDA 12.1), and ffmpeg 4.2.9.
+Tested with Python 3.9, PyTorch 2.3.1 (CUDA 12.1), and ffmpeg 4.2.9.
 
 > **Note** — `tf_selector/main.py` and `tf_selector/segment_captioning.py` log
 > in to the Hugging Face Hub at startup via

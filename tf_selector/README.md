@@ -41,41 +41,43 @@ Inference:
 
 # 1. Shot boundary detection (§4.1)
 python shot_boundary.py \
-    --video_dir data/videos/full/144p \
-    --output_dir data/annotations/shots \
+    --video_dir ../data/videos/full/144p \
+    --output_dir ../data/annotations/shots \
     --transnetv2_script /path/to/TransNetV2/inference/transnetv2.py
 
 # 2. Speech recognition (§4.1)
 python transcribe.py \
-    --video_dir data/videos/full/144p \
-    --whisper_dir data/annotations/whisper \
-    --whisper_all_dir data/annotations/whisper_all
+    --video_dir ../data/videos/full/144p \
+    --whisper_dir ../data/annotations/whisper \
+    --whisper_all_dir ../data/annotations/whisper_all
 
 # 3. Context-aware segmentation (§4.1)
 python segment.py \
-    --whisper_dir data/annotations/whisper \
-    --video_dir data/videos/full/144p \
-    --shot_dir data/annotations/shots \
-    --output_dir data/annotations/segments
+    --whisper_dir ../data/annotations/whisper \
+    --video_dir ../data/videos/full/144p \
+    --shot_dir ../data/annotations/shots \
+    --output_dir ../data/annotations/segments
 
 # 4. Audio volume extraction (§4.3)
 python volume.py \
-    --video_dir data/videos/full/144p \
-    --output_dir data/annotations/volume
+    --video_dir ../data/videos/full/144p \
+    --output_dir ../data/annotations/volume
 
 # 5. Volume normalization (§4.3)
 python volume_minmax.py \
-    --volume_dir data/annotations/volume \
-    --output data/annotations/volume_norm.json
+    --volume_dir ../data/annotations/volume \
+    --output ../data/annotations/minmax_volume.json
 
 # 6. Segment-level captioning (§4.2)
 python segment_captioning.py \
     --meta_path ../data/metadata/video_list.csv \
     --video_path path/to/frames \
-    --segment_path ../data/annotations/segments.json \
+    --segment_path ../data/annotations/segment.json \
     --mode segment_captioning \
-    --output_path output --output_filename segment_caption.json \
-    --model OpenGVLab/InternVL2_5-8B --save_every 10
+    --output_path ../data/annotations \
+    --output_filename segment_caption.json \
+    --model OpenGVLab/InternVL2_5-8B \
+    --save_every 10
 ```
 
 Every preprocessing script accepts `--sports` to restrict processing to a
@@ -89,8 +91,10 @@ python main.py \
     --volume_path ../data/annotations/minmax_volume.json \
     --segment_path ../data/annotations/segment_caption.json \
     --mode highlight_detection \
-    --output_path output --output_filename pred.json \
-    --model meta-llama/Meta-Llama-3-8B-Instruct --save_every 10
+    --output_path output \
+    --output_filename pred.json \
+    --model meta-llama/Meta-Llama-3-8B-Instruct \
+    --save_every 10
 
 # 8. Parse the LLM output into the per-clip saliency-score format eval.py expects
 python parse.py --pred_path output/pred.json --save_path output/predictions.json

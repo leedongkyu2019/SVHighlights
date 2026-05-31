@@ -30,26 +30,26 @@ Code for reproducing the **SVHighlights** dataset from the source videos
 ```bash
 # 1. Trim full videos to game footage (§3.2)
 python trim_video.py \
-    --video_list data/metadata/video_list.csv \
-    --src_dir data/videos/full_raw \
-    --dst_dir data/videos/full/144p
+    --video_list ../data/metadata/video_list.csv \
+    --src_dir ../data/videos/full_raw \
+    --dst_dir ../data/videos/full/144p
 
 # 2. Align highlight clips to full-video frames (§3.3.1–3.3.2)
 python align.py \
-    --full_dir data/videos/full/144p \
-    --highlight_dir data/videos/highlight/144p \
-    --output_dir data/annotations/alignment
+    --full_dir ../data/videos/full/144p \
+    --highlight_dir ../data/videos/highlight/144p \
+    --output_dir ../data/annotations/alignment
 
 # 3. Automatic PSNR filtering (§3.3.3)
 python filter_frames.py \
-    --alignment_dir data/annotations/alignment \
-    --output data/annotations/all_filtered_frame_idx.json
+    --alignment_dir ../data/annotations/alignment \
+    --output ../data/annotations/all_filtered_frame_idx.json
 
 # 4. Generate per-clip highlight labels (§3.4)
 python labeling.py \
-    --filtered_json data/annotations/all_filtered_frame_idx.json \
-    --video_dir data/videos/full/144p \
-    --output data/annotations/label.json
+    --filtered_json ../data/annotations/all_filtered_frame_idx.json \
+    --video_dir ../data/videos/full/144p \
+    --output ../data/annotations/label.json
 ```
 
 ### Evaluation
@@ -57,17 +57,17 @@ python labeling.py \
 ```bash
 # Matching quality — remaining rate (Table 3). Add --full_metrics for PSNR/SSIM.
 python eval_matching_quality.py \
-    --filtered_json data/annotations/all_filtered_frame_idx.json \
-    --full_dir data/videos/full/144p \
-    --highlight_dir data/videos/highlight/144p \
-    --output_dir data/eval/matching_quality
+    --filtered_json ../data/annotations/all_filtered_frame_idx.json \
+    --full_dir ../data/videos/full/144p \
+    --highlight_dir ../data/videos/highlight/144p \
+    --output_dir ../data/eval/matching_quality
 
 # CLIP similarity (Table 3)
 python eval_clip_similarity.py \
-    --filtered_json data/annotations/all_filtered_frame_idx.json \
-    --full_dir data/videos/full/144p \
-    --highlight_dir data/videos/highlight/144p \
-    --output_dir data/eval/clip_similarity
+    --filtered_json ../data/annotations/all_filtered_frame_idx.json \
+    --full_dir ../data/videos/full/144p \
+    --highlight_dir ../data/videos/highlight/144p \
+    --output_dir ../data/eval/clip_similarity
 ```
 
 Every script accepts `--sports` to restrict processing to a subset of sports,
