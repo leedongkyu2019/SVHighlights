@@ -150,16 +150,23 @@ features, and the annotation labels, as a Hugging Face dataset:
 
 > 🤗 **<https://huggingface.co/datasets/idong1004/SVHighlights>**
 
-Features are released as per-sport tarballs (`features/<sport>.tar`) so that
-each sport downloads as a single Xet object rather than thousands of files —
-this avoids Hugging Face's anonymous API rate limit on snapshot downloads.
+Both the directory-style annotations and the features are released as tarballs
+so they download as a few large Xet objects rather than thousands of small
+files — this avoids Hugging Face's anonymous API rate limit on snapshot
+downloads. The four `annotations/*.tar` cover all 8 sports together; features
+are split per sport (`features/<sport>.tar`).
 
 ```bash
 # 1) Download the dataset (use --max-workers 1 to stay under the HF rate limit)
 huggingface-cli download idong1004/SVHighlights \
   --repo-type dataset --local-dir ./data --max-workers 1
 
-# 2) Extract per-sport feature tarballs in place
+# 2) Extract the annotation tarballs in place
+for a in alignment segments whisper shots; do
+  tar -xf data/annotations/${a}.tar -C data/annotations/ && rm data/annotations/${a}.tar
+done
+
+# 3) Extract the per-sport feature tarballs in place
 for s in american_football baseball basketball ice_hockey race rugby soccer volleyball; do
   tar -xf data/features/${s}.tar -C data/features/ && rm data/features/${s}.tar
 done
@@ -172,12 +179,12 @@ data/
 ├── metadata/
 │   └── video_list.csv       # video URLs + per-video trim boundaries
 ├── annotations/
-│   ├── alignment/            # benchmark/align.py
+│   ├── alignment/            # benchmark/align.py            (from alignment.tar)
 │   ├── all_filtered_frame_idx.json   # benchmark/filter_frames.py + manual filtering
 │   ├── label.json            # benchmark/labeling.py
-│   ├── shots/                # tf_selector/shot_boundary.py
-│   ├── whisper/              # tf_selector/transcribe.py
-│   ├── segments/             # tf_selector/segment.py
+│   ├── shots/                # tf_selector/shot_boundary.py  (from shots.tar)
+│   ├── whisper/              # tf_selector/transcribe.py     (from whisper.tar)
+│   ├── segments/             # tf_selector/segment.py        (from segments.tar)
 │   ├── segment_caption.json  # tf_selector/segment_captioning.py (VLM)
 │   ├── volume.json           # tf_selector/volume.py
 │   └── minmax_volume.json    # tf_selector/volume_minmax.py
