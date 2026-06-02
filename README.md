@@ -182,7 +182,6 @@ data/
 │   ├── volume.json           # tf_selector/volume.py
 │   └── minmax_volume.json    # tf_selector/volume_minmax.py
 └── features/
-    ├── metadata_<sport>.jsonl   # QVHighlights-style query metadata
     └── <sport>/                 # extracted from features/<sport>.tar
         ├── vid_clip/            # HERO video CLIP features
         ├── vid_slowfast/        # HERO video SlowFast features
