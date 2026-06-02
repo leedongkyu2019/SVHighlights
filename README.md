@@ -150,13 +150,22 @@ features, and the annotation labels, as a Hugging Face dataset:
 
 > 🤗 **<https://huggingface.co/datasets/idong1004/SVHighlights>**
 
+Features are released as per-sport tarballs (`features/<sport>.tar`) so that
+each sport downloads as a single Xet object rather than thousands of files —
+this avoids Hugging Face's anonymous API rate limit on snapshot downloads.
+
 ```bash
-huggingface-cli download idong1004/SVHighlights --repo-type dataset --local-dir ./data
+# 1) Download the dataset (use --max-workers 1 to stay under the HF rate limit)
+huggingface-cli download idong1004/SVHighlights \
+  --repo-type dataset --local-dir ./data --max-workers 1
+
+# 2) Extract per-sport feature tarballs in place
+for s in american_football baseball basketball ice_hockey race rugby soccer volleyball; do
+  tar -xf data/features/${s}.tar -C data/features/ && rm data/features/${s}.tar
+done
 ```
 
-**Data layout**
-
-The Hugging Face dataset is organized as follows:
+**Data layout** (after extraction)
 
 ```
 data/
@@ -173,11 +182,12 @@ data/
 │   ├── volume.json           # tf_selector/volume.py
 │   └── minmax_volume.json    # tf_selector/volume_minmax.py
 └── features/
-    └── <sport>/
-        ├── vid_clip/         # HERO video CLIP features
-        ├── vid_slowfast/     # HERO video SlowFast features
-        ├── txt_clip/         # HERO query CLIP features
-        └── aud_pann/         # PANN audio features
+    ├── metadata_<sport>.jsonl   # QVHighlights-style query metadata
+    └── <sport>/                 # extracted from features/<sport>.tar
+        ├── vid_clip/            # HERO video CLIP features
+        ├── vid_slowfast/        # HERO video SlowFast features
+        ├── txt_clip/            # HERO query CLIP features
+        └── aud_pann/            # PANN audio features
 ```
 
 Videos are named `<sport>_<idx>.mp4`, where `<sport>` is one of:
