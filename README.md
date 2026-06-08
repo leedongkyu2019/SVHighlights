@@ -2,6 +2,7 @@
 
 # 🎬 SVHighlights: Towards Extremely Long Sport Video Highlight Detection
 
+[![arXiv](https://img.shields.io/badge/arXiv-2606.06926-b31b1b.svg)](https://arxiv.org/abs/2606.06926)
 [![Project Page](https://img.shields.io/badge/Project_Page-Online-2ea44f.svg)](https://leedongkyu2019.github.io/SVHighlights/)
 [![🤗 Dataset](https://img.shields.io/badge/🤗%20Dataset-SVHighlights-yellow)](https://huggingface.co/datasets/idong1004/SVHighlights)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -54,6 +55,7 @@ strategy can effectively scale to hour-long videos.
 
 ## 🔥 Update
 
+- **[2026.06.05]** 📄 The paper is now available on [arXiv](https://arxiv.org/abs/2606.06926).
 - **[2026.05.25]** 🤖 Released the TF-SELECTOR model code.
 - **[2026.05.23]** 🚀 Released the SVHighlights dataset (annotations & features) on Hugging Face and the preprocessing code.
 - **[2026.05.17]** 🎉 SVHighlights was accepted to **KDD 2026** (Datasets & Benchmarks Track).
