@@ -145,6 +145,42 @@ img { border-radius: 6px; }
 .footer a { color: #9ec1ff; }
 .footer-note { font-size: 0.85rem; color: #8c97a8; margin-top: 0.6rem; }
 
+/* ---------- citation ---------- */
+.bibtex-block {
+  position: relative;
+  background: #f5f7fa;
+  border: 1px solid #e3e6ea;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+.bibtex-block pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-size: 13px !important;
+  color: #1f2328 !important;
+  overflow-x: auto;
+  line-height: 1.7;
+  white-space: pre;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin: 0;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #e3e6ea;
+  background: #ffffff;
+  color: #5b6470;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.copy-btn:hover { border-color: #1f6feb; color: #1f6feb; }
+
 /* ---------- responsive ---------- */
 @media screen and (max-width: 768px) {
   .paper-title { font-size: 1.85rem; }
