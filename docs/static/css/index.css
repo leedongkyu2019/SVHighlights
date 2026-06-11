@@ -145,18 +145,18 @@ img { border-radius: 6px; }
 .footer a { color: #9ec1ff; }
 .footer-note { font-size: 0.85rem; color: #8c97a8; margin-top: 0.6rem; }
 
-/* ---------- citation ---------- */
+/* ---------- citation (style matched to C-MET project page) ---------- */
 .bibtex-block {
   position: relative;
-  background: #f5f7fa;
-  border: 1px solid #e3e6ea;
+  background: #f5f5f5;
+  border: 1px solid #dbdbdb;
   border-radius: 10px;
   padding: 1.5rem;
 }
 .bibtex-block pre {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-family: "Courier New", monospace !important;
   font-size: 13px !important;
-  color: #1f2328 !important;
+  color: #363636 !important;
   overflow-x: auto;
   line-height: 1.7;
   white-space: pre;
@@ -173,13 +173,13 @@ img { border-radius: 6px; }
   font-weight: 600;
   padding: 4px 14px;
   border-radius: 999px;
-  border: 1px solid #e3e6ea;
-  background: #ffffff;
-  color: #5b6470;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  color: #555;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
-.copy-btn:hover { border-color: #1f6feb; color: #1f6feb; }
+.copy-btn:hover { border-color: hsl(204, 86%, 53%); color: hsl(204, 86%, 53%); }
 
 /* ---------- responsive ---------- */
 @media screen and (max-width: 768px) {
