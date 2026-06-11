@@ -338,3 +338,16 @@ agreement.
 Approved requests receive a Google Drive link with a 7-day access window. For
 any issue with the form, please email `leedongkyu2019@unist.ac.kr` or open an
 issue on this repository.
+
+## 📚 Citation
+
+If you find SVHighlights useful in your research, please cite:
+
+```bibtex
+@article{lee2026svhighlights,
+  title={SVHighlights: Towards Extremely Long Sport Video Highlight Detection},
+  author={Lee, Donggyu and Ki, Youngbin and Kang, Jeonghun and Kim, Taehwan},
+  journal={arXiv preprint arXiv:2606.06926},
+  year={2026}
+}
+```
