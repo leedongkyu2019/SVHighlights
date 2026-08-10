@@ -344,10 +344,15 @@ issue on this repository.
 If you find SVHighlights useful in your research, please cite:
 
 ```bibtex
-@article{lee2026svhighlights,
+@inproceedings{Lee_2026,
   title={SVHighlights: Towards Extremely Long Sport Video Highlight Detection},
+  url={http://dx.doi.org/10.1145/3770855.3817564},
+  DOI={10.1145/3770855.3817564},
+  booktitle={Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2},
+  publisher={ACM},
   author={Lee, Donggyu and Ki, Youngbin and Kang, Jeonghun and Kim, Taehwan},
-  journal={arXiv preprint arXiv:2606.06926},
-  year={2026}
+  year={2026},
+  month=Aug,
+  pages={9254–9265}
 }
 ```
